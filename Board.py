@@ -82,7 +82,7 @@ def checkNegativeDiagonal(board,row,col,piece):
     while currentRow<=5  and currentCol<7 and board[currentRow][currentCol]==piece:
         count+=1
         currentRow+=1
-        currentCol-=1
+        currentCol+=1
 
     #check for upwards and left
     currentRow=row-1
@@ -97,35 +97,21 @@ def checkNegativeDiagonal(board,row,col,piece):
         return True
     return False
 
+def checkWin(board,row,col,piece):
+    if checkNegativeDiagonal(board,row,col,piece) or checkHorizontal(board,row,col,piece) or checkPositiveDiagonal(board,row,col,piece) or checkVertical(board,row,col,piece):
+        return True
+    return False
 
-if __name__=="__main__":
-    board=createBoard()
-    print("Board Created")
-    for row in board:
-        print (row)
+def getValidColumns(board):
+    validColumns=[]
+    for cols in range(7):
+        if isValidMove(board,cols):
+            validColumns.append(cols)
+    return validColumns
 
-    print("\n Dropping piece 1 in coulmn 3:")
-    success=dropPieces(board,3,1)
-    for row in board:
+def printBoard(board):
+    print("0 1 2 3 4 5 6")
+    for row in reversed(board):
         print(row)
 
-    print("\n Dropping piece 2 in coulmn 3:")
-    success=dropPieces(board,3,2)
-    for row in board:
-        print(row)
 
-    print("\n Checking for valid Moves:")
-    valid=isValidMove(board,3)
-    print(f"Column 3 valid: {valid}")
-
-    print("\nFilling up column 3:")
-    dropPieces(board, 3, 1)
-    dropPieces(board, 3, 2)
-    dropPieces(board, 3, 1)
-    dropPieces(board, 3, 2)
-
-    for row in board:
-        print(row)
-
-    valid = isValidMove(board, 3)
-    print(f"Column 3 valid after filling: {valid}")
