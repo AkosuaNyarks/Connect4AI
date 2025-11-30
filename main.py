@@ -2,10 +2,10 @@ from Board import *
 
 def playGame():
     board = createBoard()
-    game_over = False
+    gameOver = False
     turn = 0  # 0 = human, 1 = AI
     
-    while not game_over:
+    while not gameOver:
         printBoard(board)
         # Human turn
         if turn == 0:
@@ -16,7 +16,7 @@ def playGame():
                 if checkWin(board,row,col,piece):
                     printBoard(board)
                     print("You Win")
-                    game_over=True
+                    gameOver=True
             else:
                 print("Invalid Move,try again")
                 continue
@@ -31,10 +31,13 @@ def playGame():
             if checkWin(board,row,col,piece):
                 printBoard(board)
                 print("AI Wins")
-                game_over=True
-        
+                gameOver=True 
 
         turn = (turn + 1) % 2  # Switch turns
+        if not gameOver and len(getValidColumns(board))==0:
+            printBoard(board)
+            print("Draw")
+            gameOver=True
 
 if __name__ == "__main__":
     playGame()

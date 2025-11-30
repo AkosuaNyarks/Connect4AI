@@ -114,12 +114,24 @@ def getValidColumns(board):
 
 def printBoard(board):
     print("0 1 2 3 4 5 6")
-    for row in reversed(board):
+    for row in board:
         print(row)
 
 def randomMoves(board):
     validColumns=getValidColumns(board)
     randomCol=random.choice(validColumns)
     return randomCol
+
+def Minimax(board,depth,AI):
+   #Bases Cases
+   #-Draw
+   if len(getValidColumns(board))==0:
+       return 0
+   
+   #-depth
+   if depth ==0:
+       return 0
+   
+   
 
 
