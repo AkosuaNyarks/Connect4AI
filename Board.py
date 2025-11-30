@@ -1,4 +1,7 @@
 # Initalizes the game Board
+import random
+
+
 def createBoard():
     row, column = 6,7
     board = [[0 for j in range(column)] for i in range(row)]
@@ -11,10 +14,10 @@ def dropPieces(board, column,piece):
     while currentRow >=0:
         if board[currentRow][column]==0:
             board[currentRow][column]=piece
-            return True
+            return currentRow
         else:
             currentRow=currentRow-1
-    return False
+    return None
 
 def isValidMove(board, column):
     topRow=0
@@ -113,5 +116,10 @@ def printBoard(board):
     print("0 1 2 3 4 5 6")
     for row in reversed(board):
         print(row)
+
+def randomMoves(board):
+    validColumns=getValidColumns(board)
+    randomCol=random.choice(validColumns)
+    return randomCol
 
 
