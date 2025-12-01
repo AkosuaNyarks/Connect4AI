@@ -122,15 +122,59 @@ def randomMoves(board):
     randomCol=random.choice(validColumns)
     return randomCol
 
-def Minimax(board,depth,AI):
+def checkWinner(board,piece):
+    for row in range(6):
+        for col in range(7):
+            if board[row][col]==piece:
+                if checkWin(board,row,col,piece):
+                    return True
+    return False
+
+def miniMax(board,depth,maximizingPlayer):
    #Bases Cases
+    if checkWinner(board,2):
+        return 100
+    if checkWinner(board,1):
+       return -100
    #-Draw
-   if len(getValidColumns(board))==0:
+    if len(getValidColumns(board))==0:
        return 0
-   
-   #-depth
-   if depth ==0:
+     #-depth
+    if depth ==0:
        return 0
+    
+    if maximizingPlayer:
+        maxScore=-float("inf")
+        for col in getValidColumns(board):
+            row=dropPieces(board,col,2)
+            score=miniMax(board,depth-1,False)
+            board[row][col]=0
+            maxScore=max(maxScore,score)
+        return maxScore
+    else:
+        minScore = float('inf')
+        for col in getValidColumns(board):
+            row = dropPieces(board, col, 1)
+            score = miniMax(board, depth - 1, True)
+            board[row][col] = 0
+            minScore = min(minScore, score)
+        return minScore
+    
+def getBestMove(board,depth):
+    validColumns=getValidColumns(board)
+    bestScore=-float("inf")
+    bestColumn=validColumns[0]
+
+    for col in validColumns:
+        row=dropPieces(board,col,2)
+        score=miniMax(board,depth-1,False)
+        board[row][col]=0
+        if score>bestScore:
+            bestScore=score
+            bestCol=col
+    return bestCol
+
+
    
    
 

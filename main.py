@@ -23,7 +23,7 @@ def playGame():
         else:
             # AI's turn
             print("AI is thinking...")
-            col=randomMoves(board)
+            col=getBestMove(board,4)
             piece=2
             row=dropPieces(board, col,piece)
             print(f"AI selected column:{col},row:{row}")
@@ -38,6 +38,7 @@ def playGame():
             printBoard(board)
             print("Draw")
             gameOver=True
+        
 
 if __name__ == "__main__":
     playGame()
