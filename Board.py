@@ -141,7 +141,7 @@ def miniMax(board,depth,maximizingPlayer,alpha,beta):
        return 0
      #-depth
     if depth ==0:
-       return 0
+       return evaluationPosition(board,2)
     
     if maximizingPlayer:
         maxScore=-float("inf")
@@ -185,6 +185,56 @@ def getBestMove(board,depth):
             bestCol=col
         alpha=max(alpha,bestScore)
     return bestCol
+
+
+def evaluationConditions(section,piece):
+    score=0
+    opponentPiece = 1 if piece == 2 else 2
+    
+    aiPieceCount=section.count(piece)
+    emptySlotCount=section.count(0)
+    opponentPieceCount=section.count(opponentPiece)
+
+    if aiPieceCount==4:
+        score+=100
+    elif aiPieceCount==3 and emptySlotCount==1:
+        score+=50
+    elif aiPieceCount==2 and emptySlotCount==2:
+        score=score+10
+    
+    if opponentPieceCount==3 and emptySlotCount==1:
+        score-=40
+    elif opponentPieceCount==2 and emptySlotCount==2:
+        score-=8
+    return score
+
+
+
+def evaluationPosition(board, piece):
+    score=0
+    #check for horizontal sections
+    for row in range(0,6):
+        for col in range(0,4):
+            section=[board[row][col],board[row][col+1],board[row][col+2],board[row][col+3]]
+            score=score+evaluationConditions(section,piece)
+    #check for vertical section
+    for col in range(7):
+        for row in range(3):
+            section=[board[row][col], board[row+1][col], board[row+2][col], board[row+3][col]]
+            score = score + evaluationConditions(section, piece)
+    #positive diagonals
+    for row in range(3,6):
+        for col in range(0,4):
+            section= [board[row][col], board[row-1][col+1], board[row-2][col+2], board[row-3][col+3]]
+            score += evaluationConditions(section, piece)
+    #negative diagonals
+    for row in range(0,3): 
+        for col in range(0,4):  
+            section = [board[row][col], board[row+1][col+1], board[row+2][col+2], board[row+3][col+3]]
+            score += evaluationConditions(section, piece)
+
+
+    return score
 
 
    
