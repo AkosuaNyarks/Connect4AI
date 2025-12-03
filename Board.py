@@ -130,7 +130,7 @@ def checkWinner(board,piece):
                     return True
     return False
 
-def miniMax(board,depth,maximizingPlayer):
+def miniMax(board,depth,maximizingPlayer,alpha,beta):
    #Bases Cases
     if checkWinner(board,2):
         return 100
@@ -147,31 +147,43 @@ def miniMax(board,depth,maximizingPlayer):
         maxScore=-float("inf")
         for col in getValidColumns(board):
             row=dropPieces(board,col,2)
-            score=miniMax(board,depth-1,False)
+            score=miniMax(board,depth-1,False,alpha,beta)
             board[row][col]=0
             maxScore=max(maxScore,score)
+
+            alpha=max(alpha,maxScore)
+            if alpha >=beta:
+                break
         return maxScore
     else:
         minScore = float('inf')
         for col in getValidColumns(board):
             row = dropPieces(board, col, 1)
-            score = miniMax(board, depth - 1, True)
+            score = miniMax(board, depth - 1, True,alpha,beta)
             board[row][col] = 0
             minScore = min(minScore, score)
+
+            beta=min(beta,minScore)
+            if alpha>=beta:
+                break
         return minScore
     
 def getBestMove(board,depth):
     validColumns=getValidColumns(board)
     bestScore=-float("inf")
-    bestColumn=validColumns[0]
+    bestCol=validColumns[0]
+
+    alpha=-float("inf")
+    beta=float("inf")
 
     for col in validColumns:
         row=dropPieces(board,col,2)
-        score=miniMax(board,depth-1,False)
+        score=miniMax(board,depth-1,False,alpha,beta)
         board[row][col]=0
         if score>bestScore:
             bestScore=score
             bestCol=col
+        alpha=max(alpha,bestScore)
     return bestCol
 
 

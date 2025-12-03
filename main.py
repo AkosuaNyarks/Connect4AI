@@ -9,7 +9,18 @@ def playGame():
         printBoard(board)
         # Human turn
         if turn == 0:
-            col = int(input("Your turn (0-6): "))
+            colInput = input("Your turn (0-6): ")
+
+            if not colInput.isdigit():
+                print("Please enter a valid number (0-6).")
+                continue
+            
+            col=int(colInput)
+
+            if col < 0 or col > 6:
+                print("Invalid column! Please choose 0-6.")
+                continue
+
             piece=1
             if isValidMove(board,col):
                 row=dropPieces(board, col,piece)
@@ -18,12 +29,12 @@ def playGame():
                     print("You Win")
                     gameOver=True
             else:
-                print("Invalid Move,try again")
+                print("column is full,try another column")
                 continue
         else:
             # AI's turn
             print("AI is thinking...")
-            col=getBestMove(board,4)
+            col=getBestMove(board,6)
             piece=2
             row=dropPieces(board, col,piece)
             print(f"AI selected column:{col},row:{row}")
