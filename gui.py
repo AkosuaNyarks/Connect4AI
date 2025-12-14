@@ -18,12 +18,12 @@ white = (255, 255, 255)
 red= (255, 0, 0)
 
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Connect Four Game")
+pygame.display.set_caption("Let's Play Connect Four!")
 
 print("")
-pygame.quit()
 
-def display_board(board):
+
+def displayBoard(board):
     pieceColors={
         0: black,
         1: red,
@@ -42,8 +42,49 @@ def display_board(board):
     
     pygame.display.update()
 
-    def main():
-        board = createBoard()
-        gameOver = False
-        turn = 0  
+def main():
+    board = createBoard()
+    gameOver = False
+    turn = 0  
+
+    displayBoard(board)
+    while not gameOver:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                raise SystemExit
+            if event.type==pygame.MOUSEBUTTONDOWN and turn ==0:
+                posX= event.pos[0]
+                col=int(posX//tileSize)
+
+                if isValidMove(board,col):
+                    row=dropPieces(board,col,1)
+                    displayBoard(board)
+
+                    if checkWin(board,row,col,1):
+                        print(" You've Won against the Agent! You're so Smart!")
+                        gameOver=True
+                    else:
+                        turn=1
+                else:
+                    print("Invalid Move")
+        if turn == 1 and not gameOver:
+                print("AI is thinking...")
+                pygame.time.wait(500)  
+            
+                col = getBestMove(board, 6)
+                row = dropPieces(board, col, 2)
+                displayBoard(board)
+                print(f"AI selected column:{col}")
+            
+                if checkWin(board, row, col, 2):
+                    print("AI Wins!Better Luck")
+                    gameOver = True
+                else:
+                    turn = 0  # Back to human
+    
+    pygame.time.wait(3000)  # Wait 3 seconds before closing
+
+if __name__ == "__main__":
+    main()
+
 
