@@ -1,8 +1,10 @@
 import pygame
 import sys
+import random
 from Board import *
 
 pygame.init()
+font = pygame.font.Font(None, 50) 
 
 rows=6
 cols=7
@@ -42,6 +44,30 @@ def displayBoard(board):
     
     pygame.display.update()
 
+def confetti():
+    colors = [red, yellow, blue, (255, 0, 255), (0, 255, 255), (255, 165, 0)]
+    for i in range(50):
+        x=random.randint(0,width)
+        y=random.randint(0,height)
+        color = random.choice(colors)
+        size = random.randint(5, 15)
+        pygame.draw.circle(screen, color, (x, y), size)
+
+
+def display_winner(board, winner_text):
+    for i in range(30):
+        displayBoard(board)
+        confetti()
+        
+        text = font.render(winner_text, True, white)
+        text_rect = text.get_rect(center=(width//2, 50))
+        
+        pygame.draw.rect(screen, black, text_rect.inflate(20, 20))
+        screen.blit(text, text_rect)
+        
+        pygame.display.update()
+        pygame.time.wait(100)
+
 def main():
     board = createBoard()
     gameOver = False
@@ -61,7 +87,7 @@ def main():
                     displayBoard(board)
 
                     if checkWin(board,row,col,1):
-                        print(" You've Won against the Agent! You're so Smart!")
+                        display_winner(board, "Excellent! You won against the AI! So smart!")
                         gameOver=True
                     else:
                         turn=1
@@ -77,12 +103,15 @@ def main():
                 print(f"AI selected column:{col}")
             
                 if checkWin(board, row, col, 2):
-                    print("AI Wins!Better Luck")
+                    display_winner(board, "AI wins! Too bad better luck next time!")
                     gameOver = True
                 else:
                     turn = 0  # Back to human
+        if not gameOver and len(getValidColumns(board)) == 0:
+            display_winner(board, "It's a Draw! 🤝") 
+            gameOver = True
     
-    pygame.time.wait(3000)  # Wait 3 seconds before closing
+    pygame.time.wait(3000)  
 
 if __name__ == "__main__":
     main()
